@@ -1,12 +1,12 @@
-const _ = require('underscore');
+const express = require('express');
+const app = express();
+const port = 3003;
+app.get('/',(req,res)=>{
+    res.send("Hello world!!!");
+})
 
+app.get('/api/cources', (req,res) => {
+    res.send([1,2,3]);
+})
 
-var result= _.contains([1,2,3], 3);
-
-console.log("check", result);
-
-var lion = require('lion-lib');
-
-var add = lion.add(1,3);
-var mult = lion.multiply(2,4);
-console.log("add",add,mult);
+app.listen(port, ()=>{console.log(`Listning on port ${port}...`)});
