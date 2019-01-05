@@ -6,6 +6,7 @@ const auth = require('./auth');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
+const debug = require('debug')('app:startup');
 
 //builtIn middlewares
 app.use(express.json());
@@ -20,7 +21,7 @@ app.use(auth);
 app.use(helmet());
 console.log(`App environment is ${app.get('env')}`);
 if(app.get('env') == "development"){
-    console.log("morgan listning...");
+    debug("morgan listning...");
     app.use(morgan('tiny'));
 }
 
@@ -100,6 +101,6 @@ function validateInputs(course) {
 
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, ()=>{console.log(`Listning on the port ${port}...`)});
 
