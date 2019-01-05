@@ -7,6 +7,10 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
 
+// Set template engine
+app.set('view engine', 'pug');
+app.set('views', './views');
+
 //builtIn middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,7 +40,7 @@ const courses = [
 ]
 
 app.get('/',(req,res)=>{
-    res.send("Hello world!!!");
+    res.render('index',{title: "Express App", message: "Hello!!!"})
 });
 
 app.get('/api/courses', (req,res) => {
