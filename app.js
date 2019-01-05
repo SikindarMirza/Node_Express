@@ -5,6 +5,7 @@ const log = require('./logger');
 const auth = require('./auth');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const config = require('config');
 
 //builtIn middlewares
 app.use(express.json());
@@ -22,6 +23,11 @@ if(app.get('env') == "development"){
     console.log("morgan listning...");
     app.use(morgan('tiny'));
 }
+
+// Configurations
+console.log(`App name is ${config.get('name')}`);
+console.log(`host is ${config.get('mail.host')}`);
+console.log(`password is ${config.get('mail.password')}`);
 
 const courses = [
     { id:1, name: "course1" },
