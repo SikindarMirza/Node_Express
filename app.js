@@ -2,15 +2,23 @@ const express = require('express');
 const Joi = require('joi');
 const app = express();
 const log = require('./logger');
-const auth =require('./auth');
+const auth = require('./auth');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
+//builtIn middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public')); //public is the name of the foldet which needs to send as an argument
 
+//custom middlewares
 app.use(log);
-
 app.use(auth);
+
+//third party middlewares
+app.use(helmet());
+app.use(morgan('tiny'));
+
 
 const courses = [
     { id:1, name: "course1" },
