@@ -17,8 +17,11 @@ app.use(auth);
 
 //third party middlewares
 app.use(helmet());
-app.use(morgan('tiny'));
-
+console.log(`App environment is ${app.get('env')}`);
+if(app.get('env') == "development"){
+    console.log("morgan listning...");
+    app.use(morgan('tiny'));
+}
 
 const courses = [
     { id:1, name: "course1" },
