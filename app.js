@@ -1,12 +1,15 @@
 const express = require('express');
 const Joi = require('joi');
 const app = express();
-const log = require('./logger');
+const log = require('./middleware/logger');
 const auth = require('./auth');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
 const debug = require('debug')('app:startup');
+
+const courses = require('./routes/courses');
+const home = require('./routes/home');
 
 // Set template engine
 app.set('view engine', 'pug');
@@ -29,72 +32,13 @@ if(app.get('env') == "development"){
     app.use(morgan('tiny'));
 }
 
+app.use('/api/courses', courses);
+app.use('/', home);
+
 // Configurations
 console.log(`App name is ${config.get('name')}`);
 console.log(`host is ${config.get('mail.host')}`);
 console.log(`password is ${config.get('mail.password')}`);
-
-const courses = [
-    { id:1, name: "course1" },
-    { id:2, name: "course2" },
-    { id:3, name: "course3" }    
-]
-
-app.get('/',(req,res)=>{
-    res.render('index',{title: "Express App", message: "Hello!!!"})
-});
-
-app.get('/api/courses', (req,res) => {
-    res.send(courses);
-});
-
-app.get('/api/courses/:id', (req, res) => {
-    const course = courses.find( c => c.id === parseInt(req.params.id));
-    if(!course) return res.status(404).send("Course not found");
-    res.send(course);
-});
-
-
-app.post('/api/courses', (req,res) => {
-    
-    const { error } = validateInputs(req.body);
-
-    if(error) return res.status(400).send(error.details[0].message);
-
-    const course = {
-        id : courses.length + 1,
-        name: req.body.name
-    };
-    courses.push(course);
-    res.send(course);
-});
-
-app.put('/api/courses/:id', (req,res) => {
-    //check if the course is present
-    const course = courses.find( c => c.id === parseInt(req.params.id));
-    if(!course) return res.status(404).send("The course with the given id is not present.");
-
-    //validate the input values
-    const { error } = validateInputs(req.body);
-    
-    if(error) return res.status(400).send(error.details[0].message);
-
-    //update the course
-    course.name = req.body.name;
-    res.send(course);
-});
-
-app.delete('/api/courses/:id', (req,res) => {
-
-    const course = courses.find( c => c.id === parseInt(req.params.id));
-    if(!course) return res.status(404).send("The course with the given id is not present.");
-    
-    const index = courses.indexOf(course);
-    courses.splice(index,1);
-
-    res.send(course);
-
-});
 
 function validateInputs(course) {
     const schema = {
