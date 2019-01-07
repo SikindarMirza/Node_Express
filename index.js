@@ -1,10 +1,15 @@
 console.log("Hello");
-getUser(1, (user) => {
-    console.log("user is", user);
-    getRepository(user.gitHubUserName, (repos) => {
-        console.log("repos", repos)
-    })
-});
+getUser(1, getRepo);
+
+function displayCommits(commits) {
+    console.log(commits);
+}
+function getCommits(repos) {
+    getCommits(repo, displayCommits);
+}
+function getRepo(user){
+    getRepository(user.gitHubUserName, getCommits);
+}
 console.log("World");
 
 function getUser(id, callback) {
